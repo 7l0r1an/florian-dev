@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Structures Library | Florian</title>
+    <link rel="stylesheet" href="css/project.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="index.html" class="nav-back">
+            <i class="fas fa-arrow-left"></i> Back to Portfolio
+        </a>
+        <ul>
+            <li><a href="index.html#despre">About</a></li>
+            <li><a href="index.html#proiecte">Projects</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="hero">
+    <p class="project-label">Project Case Study</p>
+    <h1>Data Structures <span class="highlight">Library</span></h1>
+    <p>Three abstract data type implementations in C++ built from scratch — no STL containers used. Each includes a custom iterator, full CRUD operations, exception handling, and an automated test suite.</p>
+    <div class="tags">
+        <span class="tag accent">C++</span>
+        <span class="tag">Data Structures</span>
+        <span class="tag">Algorithms</span>
+        <span class="tag">OOP</span>
+        <span class="tag">Iterators</span>
+        <span class="tag">Templates</span>
+    </div>
+</div>
+
+<hr>
+
+<!-- Overview -->
+<section>
+    <h2>Overview</h2>
+    <p class="section-sub">Three independent data structure implementations, each with a clean interface, custom iterator, and automated tests covering edge cases and large inputs.</p>
+    <div class="arch-grid">
+        <div class="arch-card">
+            <div class="layer">TAD 1</div>
+            <h3>Dictionary</h3>
+            <p>Hash table with open addressing (linear probing), dynamic resizing at 75% load factor, and lazy deletion via tombstone markers.</p>
+        </div>
+        <div class="arch-card">
+            <div class="layer">TAD 2</div>
+            <h3>Ordered Dictionary</h3>
+            <p>Singly linked list kept sorted by a user-supplied relation function. Supports ascending, descending, or any custom ordering.</p>
+        </div>
+        <div class="arch-card">
+            <div class="layer">TAD 3</div>
+            <h3>Sparse Matrix</h3>
+            <p>Dynamic array of sorted triplets (row, col, value) with binary search for O(log n) element access. Only non-zero values stored.</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- TAD 1: Dictionary -->
+<section>
+    <h2>Dictionary — Hash Table</h2>
+    <p class="section-sub">Open addressing with linear probing, dynamic resizing, and tombstone deletion.</p>
+
+    <div class="features-grid">
+        <div class="feature">
+            <i class="fas fa-hashtag feature-icon"></i>
+            <div>
+                <h3>Open Addressing</h3>
+                <p>Collisions resolved with linear probing. Hash function: <code style="color:#888">((key % capacity) + capacity) % capacity</code> to handle negative keys correctly.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-expand-arrows-alt feature-icon"></i>
+            <div>
+                <h3>Dynamic Resizing</h3>
+                <p>When load factor exceeds 75%, the table doubles in size (<code style="color:#888">capacity * 2 + 1</code>) and all active elements are rehashed into the new array.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-trash feature-icon"></i>
+            <div>
+                <h3>Tombstone Deletion</h3>
+                <p>Deleted slots are marked with state <code style="color:#888">-1</code> instead of being cleared, so probing chains remain intact. Empty slots are <code style="color:#888">0</code>, active are <code style="color:#888">1</code>.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-exchange-alt feature-icon"></i>
+            <div>
+                <h3>Key Update</h3>
+                <p>Adding an existing key replaces the value and returns the old one. Adding a new key returns <code style="color:#888">NULL_TVALOARE</code>.</p>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <p class="section-note">Resize + rehash — triggered when load factor exceeds 75%:</p>
+    <div class="code-block">
+        <span class="keyword">if</span> (lungime > capacitate * <span class="string">3</span>/<span class="string">4</span>) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> capacitate_veche = capacitate;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="classname">TElem</span>* arr_vechi = arr;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;capacitate = capacitate * <span class="string">2</span> + <span class="string">1</span>;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;arr = <span class="keyword">new</span> <span class="classname">TElem</span>[capacitate];<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;lungime = <span class="string">0</span>;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="string">0</span>; i < capacitate_veche; i++)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (stari_vechi[i] == <span class="string">1</span>)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">adauga</span>(arr_vechi[i].first, arr_vechi[i].second); <span class="comment">// rehash</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">delete</span>[] arr_vechi;<br>
+        }
+    </div>
+
+    <p class="section-note">Complexity:</p>
+    <div class="stats-row">
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(1)</span>
+            <span class="label">add / search / delete avg</span>
+        </div>
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(n)</span>
+            <span class="label">worst case (full table)</span>
+        </div>
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(n)</span>
+            <span class="label">resize (amortized O(1))</span>
+        </div>
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(n)</span>
+            <span class="label">space</span>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- TAD 2: DO -->
+<section>
+    <h2>Ordered Dictionary — Sorted Linked List</h2>
+    <p class="section-sub">Singly linked list sorted by a relation function passed at construction time.</p>
+
+    <div class="features-grid">
+        <div class="feature">
+            <i class="fas fa-sort feature-icon"></i>
+            <div>
+                <h3>Custom Ordering</h3>
+                <p>The relation <code style="color:#888">Relatie r</code> is a function pointer <code style="color:#888">bool(*)(TCheie, TCheie)</code> passed to the constructor — supports ascending, descending, or any total order.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-link feature-icon"></i>
+            <div>
+                <h3>Sorted Insertion</h3>
+                <p>New nodes are inserted in the correct position by traversing until the relation fails, keeping the list always sorted.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-memory feature-icon"></i>
+            <div>
+                <h3>Manual Memory Management</h3>
+                <p>Nodes allocated with <code style="color:#888">new</code>, destructor walks the list and <code style="color:#888">delete</code>s each node. No memory leaks.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-walking feature-icon"></i>
+            <div>
+                <h3>Iterator</h3>
+                <p>Iterator walks the linked list in order, returning elements in the sorted sequence defined by the relation.</p>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <p class="section-note">Sorted insertion — finds the correct position using the relation:</p>
+    <div class="code-block">
+        <span class="classname">Nod</span>* previous = head;<br>
+        <span class="classname">Nod</span>* current = head->next;<br>
+        <span class="keyword">while</span> (current != <span class="keyword">nullptr</span> && <span class="func">rel</span>(current->info.first, c)) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;previous = current;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;current = current->next;<br>
+        }<br>
+        previous->next = nodNou;<br>
+        nodNou->next = current;
+    </div>
+
+    <p class="section-note">Complexity:</p>
+    <div class="stats-row">
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(n)</span>
+            <span class="label">add (find position)</span>
+        </div>
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(n)</span>
+            <span class="label">search / delete</span>
+        </div>
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(1)</span>
+            <span class="label">iterator next</span>
+        </div>
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(n)</span>
+            <span class="label">space</span>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- TAD 3: Sparse Matrix -->
+<section>
+    <h2>Sparse Matrix</h2>
+    <p class="section-sub">Dynamic array of sorted triplets (row, col, value) — only non-zero elements stored.</p>
+
+    <div class="features-grid">
+        <div class="feature">
+            <i class="fas fa-th feature-icon"></i>
+            <div>
+                <h3>Triplet Storage</h3>
+                <p>Each non-zero element stored as <code style="color:#888">struct Triplet &#123; int linie, coloana; TElem valoare; &#125;</code>, sorted by row then column.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-search feature-icon"></i>
+            <div>
+                <h3>Binary Search</h3>
+                <p>Element access uses binary search on the sorted triplet array — O(log n) per lookup instead of O(n) linear scan.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-expand-arrows-alt feature-icon"></i>
+            <div>
+                <h3>Dynamic Resizing</h3>
+                <p>Underlying array doubles in capacity when full. Insertion maintains sorted order by shifting elements right.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-compress feature-icon"></i>
+            <div>
+                <h3>Memory Efficient</h3>
+                <p>A 300×300 matrix with sparse data uses only as much memory as there are non-zero elements — not 90,000 slots.</p>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <p class="section-note">Binary search for element (i, j):</p>
+    <div class="code-block">
+        <span class="keyword">int</span> <span class="classname">Matrice</span>::<span class="func">cautaIndex</span>(<span class="keyword">int</span> i, <span class="keyword">int</span> j) <span class="keyword">const</span> {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> st = <span class="string">0</span>, dr = dimensiune - <span class="string">1</span>;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">while</span> (st <= dr) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">int</span> mijloc = (st + dr) / <span class="string">2</span>;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (elems[mijloc].linie == i && elems[mijloc].coloana == j)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> mijloc;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (elems[mijloc].linie < i || (elems[mijloc].linie == i && elems[mijloc].coloana < j))<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;st = mijloc + <span class="string">1</span>;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">else</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dr = mijloc - <span class="string">1</span>;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> -<span class="string">1</span>; <span class="comment">// not found → element is 0</span><br>
+        }
+    </div>
+
+    <p class="section-note">Complexity:</p>
+    <div class="stats-row">
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(log n)</span>
+            <span class="label">element access</span>
+        </div>
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(n)</span>
+            <span class="label">modify (shift on insert)</span>
+        </div>
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(k)</span>
+            <span class="label">space (k = non-zero count)</span>
+        </div>
+        <div class="stat-card">
+            <span class="number" style="font-size:22px">O(1)</span>
+            <span class="label">nrLinii / nrColoane</span>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Tests -->
+<section>
+    <h2>Testing</h2>
+    <p class="section-sub">Each TAD has a short test suite (basic operations) and an extended suite (edge cases, large inputs, stress tests).</p>
+    <div class="features-grid">
+        <div class="feature">
+            <i class="fas fa-vial feature-icon"></i>
+            <div>
+                <h3>Dictionary Tests</h3>
+                <p>Create on empty, add 20,000+ elements with resize, delete odd/even keys, iterator on 60,000 elements, search after delete.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-vial feature-icon"></i>
+            <div>
+                <h3>Ordered Dictionary Tests</h3>
+                <p>Both ascending and descending relations. Random insertion order, iterator order verification after each delete, 6,000+ element stress test.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-vial feature-icon"></i>
+            <div>
+                <h3>Sparse Matrix Tests</h3>
+                <p>300×300 matrix with sparse pattern, element access, exception on invalid position, modify to zero (deletion), quantity test.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<section>
+    <a href="index.html#proiecte" class="btn">
+        <i class="fas fa-arrow-left" style="margin-right:8px"></i>Back to Projects
+    </a>
+</section>
+
+<script>
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.add('active');
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeLightbox();
+    });
+</script>
+
+</body>
+</html>

@@ -413,37 +413,3 @@ section h2 {
     .screenshot-grid-2 { grid-template-columns: 1fr; }
 }
 
-/* Project categories */
-.projects-category {
-    font-size: 28px;
-    font-weight: 600;
-    color: #ffffff;
-    margin-bottom: 24px;
-    margin-top: 60px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid #1f1f1f;
-}
-
-.projects-category:first-of-type {
-    margin-top: 0;
-}
-
-.projects-category::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background-color: #1f1f1f;
-}
-
-/* Card link */
-.card-link {
-    color: #e94560;
-    font-size: 13px;
-    text-decoration: none;
-    letter-spacing: 1px;
-    transition: opacity 0.2s ease;
-}
-
-.card-link:hover {
-    opacity: 0.7;
-}

@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Management System | Florian</title>
+    <link rel="stylesheet" href="css/project.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="index.html" class="nav-back">
+            <i class="fas fa-arrow-left"></i> Back to Portfolio
+        </a>
+        <ul>
+            <li><a href="index.html#despre">About</a></li>
+            <li><a href="index.html#proiecte">Projects</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close"><i class="fas fa-times"></i></span>
+    <img id="lightbox-img" src="" alt="">
+</div>
+
+<div class="hero">
+    <p class="project-label">Project Case Study</p>
+    <h1>Car Management <span class="highlight">System</span></h1>
+    <p>A C++ desktop application for managing a car registry — featuring full CRUD operations, filter & sort, undo/redo with the Command pattern, CSV file persistence, automated tests, and a Qt GUI alongside a console interface.</p>
+    <div class="tags">
+        <span class="tag accent">C++</span>
+        <span class="tag">Qt</span>
+        <span class="tag">OOP</span>
+        <span class="tag">Layered Architecture</span>
+        <span class="tag">Command Pattern</span>
+        <span class="tag">Templates</span>
+        <span class="tag">CSV Persistence</span>
+    </div>
+</div>
+
+<hr>
+
+<!-- Screenshots -->
+<section>
+    <h2>Screenshots</h2>
+    <p class="section-sub">Click any image to enlarge.</p>
+    <div class="screenshot-grid-2">
+        <div class="screenshot-item">
+            <img src="car1.png" alt="Main Window" onclick="openLightbox(this.src)">
+            <p class="screenshot-caption">Main Window — CRUD + Undo</p>
+        </div>
+        <div class="screenshot-item">
+            <img src="car2.png" alt="Filter Sort Report" onclick="openLightbox(this.src)">
+            <p class="screenshot-caption">Filter, Sort & Report Window</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Features -->
+<section>
+    <h2>Features</h2>
+    <p class="section-sub">Full-featured car registry management application.</p>
+    <div class="features-grid">
+        <div class="feature">
+            <i class="fas fa-car feature-icon"></i>
+            <div>
+                <h3>Full CRUD</h3>
+                <p>Add, modify, delete, and search cars by registration number. Validation enforces the Romanian plate format (e.g. CJ01ABC).</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-undo feature-icon"></i>
+            <div>
+                <h3>Undo / Redo</h3>
+                <p>Every add, delete, and modify is undoable via the Command pattern. An undo stack of <code style="color:#888">unique_ptr&lt;ActiuneUndo&gt;</code> ensures zero memory leaks.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-filter feature-icon"></i>
+            <div>
+                <h3>Filter & Sort</h3>
+                <p>Filter by producer or type. Sort by registration number, type, or producer+model. Results shown in a dedicated Qt table window.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-chart-bar feature-icon"></i>
+            <div>
+                <h3>Report by Producer</h3>
+                <p>Generate a report showing how many cars each producer has in the registry, using <code style="color:#888">std::map</code>.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-save feature-icon"></i>
+            <div>
+                <h3>CSV Persistence</h3>
+                <p><code style="color:#888">FileRepository</code> extends <code style="color:#888">Repository</code> and auto-saves to CSV on every operation. Data is loaded on startup.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-desktop feature-icon"></i>
+            <div>
+                <h3>Dual Interface</h3>
+                <p>Both a full Qt GUI (<code style="color:#888">MainWindow</code> + <code style="color:#888">FiltrareSortareWindow</code>) and a complete console interface are available.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-list feature-icon"></i>
+            <div>
+                <h3>Work List</h3>
+                <p>Maintain a separate work list of cars to process. Add by registration number, view, or clear the list independently.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-check-double feature-icon"></i>
+            <div>
+                <h3>Automated Tests</h3>
+                <p>Full test suite using <code style="color:#888">assert()</code> covering domain, repository, service, filter, sort, work list, report, and undo — run on every startup.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Architecture -->
+<section>
+    <h2>Architecture</h2>
+    <p class="section-sub">Clean layered architecture with dependency injection — the UI never touches the repository directly.</p>
+    <div class="arch-grid">
+        <div class="arch-card">
+            <div class="layer">Layer 1 — UI</div>
+            <h3>Qt GUI + Console</h3>
+            <p><code style="color:#888">MainWindow</code> and <code style="color:#888">FiltrareSortareWindow</code> for the GUI. <code style="color:#888">UI</code> class for the console. Both depend only on <code style="color:#888">Service</code>.</p>
+        </div>
+        <div class="arch-card">
+            <div class="layer">Layer 2 — Service</div>
+            <h3>Business Logic</h3>
+            <p>Validation, undo stack management, filter, sort, work list, and report. Holds a reference to <code style="color:#888">Repository</code> injected via constructor.</p>
+        </div>
+        <div class="arch-card">
+            <div class="layer">Layer 3 — Repository</div>
+            <h3>Data Access</h3>
+            <p>Base <code style="color:#888">Repository</code> with in-memory storage. <code style="color:#888">FileRepository</code> extends it and auto-syncs to CSV on every write operation.</p>
+        </div>
+        <div class="arch-card">
+            <div class="layer">Layer 4 — Domain</div>
+            <h3>Domain Object</h3>
+            <p><code style="color:#888">Masina</code> class with registration number, producer, model, and type. Custom copy constructor with Rule of Three compliance.</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Code highlights -->
+<section>
+    <h2>Code Highlights</h2>
+    <p class="section-sub">Some interesting implementation details from the codebase.</p>
+
+    <p class="section-note">Command pattern for undo — abstract base class with three concrete implementations:</p>
+    <div class="code-block">
+        <span class="keyword">class</span> <span class="classname">ActiuneUndo</span> {<br>
+        <span class="keyword">public</span>:<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">virtual</span> <span class="keyword">void</span> <span class="func">doUndo</span>() = <span class="string">0</span>; <span class="comment">// pure virtual</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">virtual</span> ~<span class="func">ActiuneUndo</span>() = <span class="keyword">default</span>;<br>
+        };<br>
+        <br>
+        <span class="keyword">class</span> <span class="classname">UndoAdauga</span> : <span class="keyword">public</span> <span class="classname">ActiuneUndo</span> {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">void</span> <span class="func">doUndo</span>() <span class="keyword">override</span> {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;repo.<span class="func">sterge</span>(masinaAdaugata.<span class="func">getNrInmatriculare</span>());<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+        };<br>
+        <br>
+        <span class="comment">// Stack uses unique_ptr to avoid slicing and manage memory</span><br>
+        vector&lt;unique_ptr&lt;<span class="classname">ActiuneUndo</span>&gt;&gt; undoStack;<br>
+        undoStack.<span class="func">push_back</span>(<span class="func">make_unique</span>&lt;<span class="classname">UndoAdauga</span>&gt;(repo, m));<br>
+        undoStack.<span class="func">back</span>()-&gt;<span class="func">doUndo</span>(); <span class="comment">// polymorphic call</span>
+    </div>
+
+    <p class="section-note">Custom <code style="color:#ccc">DynamicVector&lt;T&gt;</code> template with Rule of Three:</p>
+    <div class="code-block">
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;<br>
+        <span class="keyword">class</span> <span class="classname">DynamicVector</span> {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;T* date; <span class="keyword">int</span> size; <span class="keyword">int</span> capacity;<br>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Rule of Three: copy constructor, operator=, destructor</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="classname">DynamicVector</span>(<span class="keyword">const</span> <span class="classname">DynamicVector</span>&amp; other); <span class="comment">// deep copy</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="classname">DynamicVector</span>&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="classname">DynamicVector</span>&amp; other);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;~<span class="classname">DynamicVector</span>() { <span class="keyword">delete</span>[] date; }<br>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">void</span> <span class="func">grow</span>() { <span class="comment">/* doubles capacity, copies elements */</span> }<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Supports range-for via begin()/end() iterators</span><br>
+        };
+    </div>
+
+    <p class="section-note">Registration number validation with <code style="color:#ccc">std::regex</code>:</p>
+    <div class="code-block">
+        <span class="keyword">static bool</span> <span class="func">nrFormatValid</span>(<span class="keyword">const</span> string&amp; nr) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Format: 2 letters + 2 digits + 3 letters (ex: CJ01ABC)</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">static const</span> std::regex pattern(<span class="string">"^[A-Za-z]{2}[0-9]{2}[A-Za-z]{3}$"</span>);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> std::<span class="func">regex_match</span>(nr, pattern);<br>
+        }
+    </div>
+</section>
+
+<hr>
+
+<!-- Stats -->
+<section>
+    <h2>By the Numbers</h2>
+    <div class="stats-row">
+        <div class="stat-card">
+            <span class="number">4</span>
+            <span class="label">Architecture layers</span>
+        </div>
+        <div class="stat-card">
+            <span class="number">3</span>
+            <span class="label">Undo types</span>
+        </div>
+        <div class="stat-card">
+            <span class="number">8</span>
+            <span class="label">Test suites</span>
+        </div>
+        <div class="stat-card">
+            <span class="number">2</span>
+            <span class="label">Interfaces</span>
+        </div>
+        <div class="stat-card">
+            <span class="number red">C++</span>
+            <span class="label">Language</span>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<section>
+    <a href="index.html#proiecte" class="btn">
+        <i class="fas fa-arrow-left" style="margin-right:8px"></i>Back to Projects
+    </a>
+</section>
+
+<script>
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.add('active');
+    }
+
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeLightbox();
+    });
+</script>
+
+</body>
+</html>

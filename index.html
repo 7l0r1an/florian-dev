@@ -22,13 +22,13 @@
 
 <!-- Despre -->
 <section id="despre">
-    <!-- id="typing-title" — JS scrie textul caracter cu caracter -->
     <h1 id="typing-title"></h1>
     <p>A passionate developer focused on Python and web development</p>
     <a href="CV_Florian_Gadiuta_EN_v2.pdf" class="btn" target="_blank">Download CV</a>
 
     <div class="skills">
         <span class="tag">Python</span>
+        <span class="tag">C++</span>
         <span class="tag">HTML</span>
         <span class="tag">CSS</span>
         <span class="tag">JavaScript</span>
@@ -50,23 +50,34 @@
 <!-- Proiecte -->
 <section id="proiecte">
     <h2>projects</h2>
+
+    <!-- Python -->
+    <p class="projects-category">Python</p>
     <div class="carduri">
         <div class="card">
             <h3>Betting Tracker</h3>
-            <p>Desktop app in Python to track sports bets, with stats and history.</p>
+            <p>Desktop app to track sports bets, with live match data, value bet calculator, match predictor, and profit charts.</p>
             <a href="betting-tracker.html" class="card-link">View Project →</a>
-            <span class="tag">Python</span>
-            <span class="tag">Tkinter</span>
+            <div>
+                <span class="tag">Python</span>
+                <span class="tag">Tkinter</span>
+                <span class="tag">Matplotlib</span>
+            </div>
         </div>
+    </div>
+
+    <!-- C++ -->
+    <p class="projects-category">C++</p>
+    <div class="carduri">
         <div class="card">
-            <h3>Snake Game</h3>
-            <p>Classic Snake game built in Python with smooth controls and score tracking.</p>
-            <span class="tag">Python</span>
-        </div>
-        <div class="card">
-            <h3>Conway's Game of Life</h3>
-            <p>Cellular automaton simulation with layered architecture and live grid rendering.</p>
-            <span class="tag">Python</span>
+            <h3>Car Management System</h3>
+            <p>Desktop app with Qt GUI for managing a car registry — CRUD, filter & sort, undo/redo, CSV persistence, and automated tests.</p>
+            <a href="car-management.html" class="card-link">View Project →</a>
+            <div>
+                <span class="tag">C++</span>
+                <span class="tag">Qt</span>
+                <span class="tag">OOP</span>
+            </div>
         </div>
     </div>
 </section>

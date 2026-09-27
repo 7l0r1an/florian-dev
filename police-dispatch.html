@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Police Dispatch System | Florian</title>
+    <link rel="stylesheet" href="css/project.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="index.html" class="nav-back">
+            <i class="fas fa-arrow-left"></i> Back to Portfolio
+        </a>
+        <ul>
+            <li><a href="index.html#despre">About</a></li>
+            <li><a href="index.html#proiecte">Projects</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close"><i class="fas fa-times"></i></span>
+    <img id="lightbox-img" src="" alt="">
+</div>
+
+<div class="hero">
+    <p class="project-label">Project Case Study — FiveM / QBCore</p>
+    <h1>Police <span class="highlight">Dispatch</span></h1>
+    <p>A custom police faction script for a FiveM roleplay server, built from scratch on QBCore — replacing the default police job. Features a duty system, an emergency call dispatch with claim logic, and a menu-driven UI. Written entirely in Lua with client-server architecture and ox_lib.</p>
+    <div class="tags">
+        <span class="tag accent">Lua</span>
+        <span class="tag">FiveM</span>
+        <span class="tag">QBCore</span>
+        <span class="tag">ox_lib</span>
+        <span class="tag">Client-Server</span>
+        <span class="tag">Callbacks</span>
+        <span class="tag">NUI</span>
+    </div>
+</div>
+
+<hr>
+
+<!-- Screenshots -->
+<section>
+    <h2>Screenshots</h2>
+    <p class="section-sub">Click any image to enlarge.</p>
+    <div class="screenshot-grid-2">
+        <div class="screenshot-item">
+            <img src="police1.png" alt="Dispatch UI" onclick="openLightbox(this.src)">
+            <p class="screenshot-caption">Dispatch UI — active calls</p>
+        </div>
+        <div class="screenshot-item">
+            <img src="police2.png" alt="On duty" onclick="openLightbox(this.src)">
+            <p class="screenshot-caption">Duty toggle at the station</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Features -->
+<section>
+    <h2>Features</h2>
+    <p class="section-sub">A complete dispatch workflow — from a civilian's 911 call to an officer closing the case.</p>
+    <div class="features-grid">
+        <div class="feature">
+            <i class="fas fa-user-shield feature-icon"></i>
+            <div>
+                <h3>Duty System</h3>
+                <p>Officers toggle on/off duty at any police station. Job verification runs server-side — only players with the police job can go on duty.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-phone-volume feature-icon"></i>
+            <div>
+                <h3>Emergency Calls</h3>
+                <p>Civilians trigger a 911 call with a message and their live location. Only on-duty officers receive the alert — filtered server-side by job and duty status.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-hand-paper feature-icon"></i>
+            <div>
+                <h3>Call Claiming</h3>
+                <p>An officer claims a call from the menu. Once claimed, it disappears from everyone else's list — no two officers on the same call.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-ban feature-icon"></i>
+            <div>
+                <h3>One Call at a Time</h3>
+                <p>An officer can't claim a second call while one is active. Business rules are enforced on the server, never trusted from the client.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-map-marker-alt feature-icon"></i>
+            <div>
+                <h3>Blip & Route</h3>
+                <p>Claiming a call places a waypoint and route to the caller's location, sent only to the officer who claimed it.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-check-circle feature-icon"></i>
+            <div>
+                <h3>Resolve</h3>
+                <p>Marking a call resolved removes it, clears the blip, and frees the officer to take the next one — closing the dispatch loop.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Architecture -->
+<section>
+    <h2>Architecture</h2>
+    <p class="section-sub">Client-server split — the server is the single source of truth for all call state. The client never decides anything that matters.</p>
+    <div class="arch-grid">
+        <div class="arch-card">
+            <div class="layer">Client</div>
+            <h3>Interaction & UI</h3>
+            <p>Markers, TextUI, and the call menu. Sends requests to the server (go on duty, create/claim/resolve a call) and renders what the server sends back. Holds no authoritative state.</p>
+        </div>
+        <div class="arch-card">
+            <div class="layer">Server</div>
+            <h3>Call State & Rules</h3>
+            <p>Owns the list of calls, each with a status and <code style="color:#888">claimedBy</code> field. Enforces every rule: job checks, claim availability, one-call limit, resolve.</p>
+        </div>
+        <div class="arch-card">
+            <div class="layer">Bridge</div>
+            <h3>Events & Callbacks</h3>
+            <p>Client-to-server events for actions, server-to-client events for notifications, and an ox_lib callback that returns each officer's available and active calls.</p>
+        </div>
+        <div class="arch-card">
+            <div class="layer">Framework</div>
+            <h3>QBCore + ox_lib</h3>
+            <p>QBCore provides the job and duty backend (<code style="color:#888">SetJobDuty</code>, <code style="color:#888">GetQBPlayers</code>). ox_lib provides notifications, context menus, and callbacks.</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Code highlights -->
+<section>
+    <h2>Code Highlights</h2>
+    <p class="section-sub">A few interesting implementation details from the codebase.</p>
+
+    <p class="section-note">Broadcast to a filtered group — only on-duty police receive the call:</p>
+    <div class="code-block">
+        <span class="keyword">local</span> players = QBCore.Functions.<span class="func">GetQBPlayers</span>()<br>
+        <span class="keyword">for</span> _, targetPlayer <span class="keyword">in</span> <span class="func">pairs</span>(players) <span class="keyword">do</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">local</span> job = targetPlayer.PlayerData.job<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> job.name == Config.JobName <span class="keyword">and</span> job.onduty <span class="keyword">then</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">TriggerClientEvent</span>(<span class="string">'ox_lib:notify'</span>, targetPlayer.PlayerData.source, {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title = <span class="string">'Apel Nou'</span>, description = message, type = <span class="string">'inform'</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">end</span><br>
+        <span class="keyword">end</span>
+    </div>
+
+    <p class="section-note">Claim logic — server enforces both rules before granting the call:</p>
+    <div class="code-block">
+        <span class="comment">-- rule 1: the call must still be available</span><br>
+        <span class="keyword">if not</span> call <span class="keyword">or</span> call.status ~= <span class="string">'nou'</span> <span class="keyword">then</span> <span class="comment">-- taken already</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="func">notify</span>(src, <span class="string">'Apel indisponibil'</span>) <span class="keyword">return</span><br>
+        <span class="keyword">end</span><br>
+        <br>
+        <span class="comment">-- rule 2: the officer can't already have an active call</span><br>
+        <span class="keyword">for</span> id, c <span class="keyword">in</span> <span class="func">pairs</span>(calls) <span class="keyword">do</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> c.claimedBy == src <span class="keyword">and</span> c.status == <span class="string">'activ'</span> <span class="keyword">then</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="func">notify</span>(src, <span class="string">'Ai deja un apel activ'</span>) <span class="keyword">return</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">end</span><br>
+        <span class="keyword">end</span><br>
+        <br>
+        <span class="comment">-- both rules passed: claim it</span><br>
+        call.status = <span class="string">'activ'</span><br>
+        call.claimedBy = src
+    </div>
+
+    <p class="section-note">Duty toggle — server verifies the job and flips duty in QBCore:</p>
+    <div class="code-block">
+        <span class="keyword">if</span> Player.PlayerData.job.name ~= Config.JobName <span class="keyword">then</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="func">notify</span>(src, <span class="string">'Nu faci parte din factiune'</span>) <span class="keyword">return</span><br>
+        <span class="keyword">end</span><br>
+        <span class="keyword">local</span> newDuty = <span class="keyword">not</span> Player.PlayerData.job.onduty<br>
+        Player.Functions.<span class="func">SetJobDuty</span>(newDuty) <span class="comment">-- real QBCore state</span>
+    </div>
+</section>
+
+<hr>
+
+<!-- Stats -->
+<section>
+    <h2>By the Numbers</h2>
+    <div class="stats-row">
+        <div class="stat-card">
+            <span class="number">3</span>
+            <span class="label">Config files</span>
+        </div>
+        <div class="stat-card">
+            <span class="number">2</span>
+            <span class="label">Business rules</span>
+        </div>
+        <div class="stat-card">
+            <span class="number blue">4</span>
+            <span class="label">Call states</span>
+        </div>
+        <div class="stat-card">
+            <span class="number">1</span>
+            <span class="label">ox_lib callback</span>
+        </div>
+        <div class="stat-card">
+            <span class="number red">Lua</span>
+            <span class="label">Language</span>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<section>
+    <a href="https://github.com/7l0r1an/fivem-scripts" target="_blank" class="btn" style="margin-right:16px">
+        <i class="fab fa-github" style="margin-right:8px"></i>View on GitHub
+    </a>
+    <a href="index.html#proiecte" class="btn">
+        <i class="fas fa-arrow-left" style="margin-right:8px"></i>Back to Projects
+    </a>
+</section>
+
+<script>
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.add('active');
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeLightbox();
+    });
+</script>
+
+</body>
+</html>

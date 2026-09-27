@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Job | Florian</title>
+    <link rel="stylesheet" href="css/project.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="index.html" class="nav-back">
+            <i class="fas fa-arrow-left"></i> Back to Portfolio
+        </a>
+        <ul>
+            <li><a href="index.html#despre">About</a></li>
+            <li><a href="index.html#proiecte">Projects</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close"><i class="fas fa-times"></i></span>
+    <img id="lightbox-img" src="" alt="">
+</div>
+
+<div class="hero">
+    <p class="project-label">Project Case Study — FiveM / QBCore</p>
+    <h1>Delivery <span class="highlight">Job</span></h1>
+    <p>A QBCore delivery job for a FiveM roleplay server. Players pick up a vehicle, complete a shift of six deliveries to random locations, and get paid — with real in-game money handled server-side, a progress circle with animations, and a return-the-vehicle finale.</p>
+    <div class="tags">
+        <span class="tag accent">Lua</span>
+        <span class="tag">FiveM</span>
+        <span class="tag">QBCore</span>
+        <span class="tag">ox_lib</span>
+        <span class="tag">Client-Server</span>
+        <span class="tag">State Machine</span>
+    </div>
+</div>
+
+<hr>
+
+<!-- Screenshots -->
+<section>
+    <h2>Screenshots</h2>
+    <p class="section-sub">Click any image to enlarge.</p>
+    <div class="screenshot-grid-2">
+        <div class="screenshot-item">
+            <img src="delivery1.png" alt="Delivery point" onclick="openLightbox(this.src)">
+            <p class="screenshot-caption">Delivery marker & progress</p>
+        </div>
+        <div class="screenshot-item">
+            <img src="delivery2.png" alt="Reward" onclick="openLightbox(this.src)">
+            <p class="screenshot-caption">Payout notification</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Features -->
+<section>
+    <h2>Features</h2>
+    <p class="section-sub">A full delivery shift, from pickup to payout.</p>
+    <div class="features-grid">
+        <div class="feature">
+            <i class="fas fa-truck feature-icon"></i>
+            <div>
+                <h3>Vehicle Spawn</h3>
+                <p>Starting the job spawns a delivery vehicle at a fixed spot, hands the player the keys (unlocked), and puts them in the driver's seat.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-random feature-icon"></i>
+            <div>
+                <h3>Random Routes</h3>
+                <p>Each delivery targets a random point from a list, with a guard that never picks the same location twice in a row.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-spinner feature-icon"></i>
+            <div>
+                <h3>Progress & Animation</h3>
+                <p>Dropping off a package plays an ox_lib progress circle with a hand-over animation, cancellable with ESC.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-coins feature-icon"></i>
+            <div>
+                <h3>Tiered Payment</h3>
+                <p>Money per delivery plus a performance bonus at the end of the shift. Amounts are rolled on the server — the client only signals completion.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-flag-checkered feature-icon"></i>
+            <div>
+                <h3>Return the Vehicle</h3>
+                <p>After six deliveries, a route back to the depot appears. Returning the vehicle deletes it and pays the bonus.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <i class="fas fa-map-signs feature-icon"></i>
+            <div>
+                <h3>Blips & Markers</h3>
+                <p>A permanent job blip, plus a routed blip to each delivery target that is recreated on every new stop.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Architecture -->
+<section>
+    <h2>Architecture</h2>
+    <p class="section-sub">A client-side state machine drives the shift; the server owns anything involving money.</p>
+    <div class="arch-grid">
+        <div class="arch-card">
+            <div class="layer">Client</div>
+            <h3>State Machine</h3>
+            <p>Three states — <code style="color:#888">idle</code>, <code style="color:#888">delivering</code>, <code style="color:#888">returning</code> — drive a single loop that handles markers, distance checks, and interaction.</p>
+        </div>
+        <div class="arch-card">
+            <div class="layer">Server</div>
+            <h3>Payments</h3>
+            <p>Rolls the reward with <code style="color:#888">math.random</code> and calls <code style="color:#888">AddMoney</code>. The amount is never sent from the client — a security boundary against cheating.</p>
+        </div>
+        <div class="arch-card">
+            <div class="layer">Bridge</div>
+            <h3>Events</h3>
+            <p>A single parameterized event handles both per-delivery pay and the final bonus, distinguished by a boolean — keeping the code DRY.</p>
+        </div>
+        <div class="arch-card">
+            <div class="layer">Framework</div>
+            <h3>QBCore + ox_lib</h3>
+            <p>QBCore for money and vehicle keys, ox_lib for the progress circle and notifications.</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Code highlights -->
+<section>
+    <h2>Code Highlights</h2>
+    <p class="section-sub">A few interesting implementation details.</p>
+
+    <p class="section-note">Random target that never repeats the previous one — using a repeat-until loop:</p>
+    <div class="code-block">
+        <span class="keyword">local function</span> <span class="func">getRandomPoint</span>(avoid)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">local</span> point<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">repeat</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;point = deliveryPoints[<span class="func">math.random</span>(#deliveryPoints)]<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">until</span> point ~= avoid <span class="comment">-- keep rolling until it's different</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> point<br>
+        <span class="keyword">end</span>
+    </div>
+
+    <p class="section-note">Reward rolled server-side — the client only says "done", never how much:</p>
+    <div class="code-block">
+        <span class="func">RegisterNetEvent</span>(<span class="string">'delivery:complete'</span>, <span class="keyword">function</span>(isFinal)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">local</span> Player = QBCore.Functions.<span class="func">GetPlayer</span>(source)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if not</span> Player <span class="keyword">then return end</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">local</span> reward<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> isFinal <span class="keyword">then</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reward = <span class="func">math.random</span>(<span class="string">1050</span>, <span class="string">1500</span>) <span class="comment">-- end-of-shift bonus</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">else</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;reward = <span class="func">math.random</span>(<span class="string">350</span>, <span class="string">550</span>) <span class="comment">-- per delivery</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">end</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Player.Functions.<span class="func">AddMoney</span>(<span class="string">'cash'</span>, reward)<br>
+        <span class="keyword">end</span>)
+    </div>
+
+    <p class="section-note">Progress circle with a hand-over animation on drop-off:</p>
+    <div class="code-block">
+        <span class="keyword">if</span> lib.<span class="func">progressCircle</span>({<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;duration = <span class="string">5000</span>, label = <span class="string">'Se livreaza...'</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;canCancel = <span class="keyword">true</span>,<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;disable = { move = <span class="keyword">true</span>, combat = <span class="keyword">true</span> },<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;anim = { dict = <span class="string">'mp_common'</span>, clip = <span class="string">'givetake1_a'</span> }<br>
+        }) <span class="keyword">then</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">-- delivery completed</span><br>
+        <span class="keyword">end</span>
+    </div>
+</section>
+
+<hr>
+
+<!-- Stats -->
+<section>
+    <h2>By the Numbers</h2>
+    <div class="stats-row">
+        <div class="stat-card">
+            <span class="number blue">3</span>
+            <span class="label">States</span>
+        </div>
+        <div class="stat-card">
+            <span class="number">6</span>
+            <span class="label">Deliveries / shift</span>
+        </div>
+        <div class="stat-card">
+            <span class="number">8</span>
+            <span class="label">Drop locations</span>
+        </div>
+        <div class="stat-card">
+            <span class="number green">2</span>
+            <span class="label">Payment tiers</span>
+        </div>
+        <div class="stat-card">
+            <span class="number red">Lua</span>
+            <span class="label">Language</span>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<section>
+    <a href="https://github.com/7l0r1an/fivem-scripts" target="_blank" class="btn" style="margin-right:16px">
+        <i class="fab fa-github" style="margin-right:8px"></i>View on GitHub
+    </a>
+    <a href="index.html#proiecte" class="btn">
+        <i class="fas fa-arrow-left" style="margin-right:8px"></i>Back to Projects
+    </a>
+</section>
+
+<script>
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.add('active');
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('active');
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeLightbox();
+    });
+</script>
+
+</body>
+</html>
